@@ -1,0 +1,104 @@
+<project name="selenium4j" basedir="." default="transform-test">
+
+	<description>Selenium4j Transformations</description>
+
+	<property file="${basedir}/build.properties" />
+	<property name="classes.dir" value="${build.dir}/classes" />
+	<property name="transform.jar.name" value="selenium4j-transform.jar" />
+	<property name="main-class" value="org.roussev.selenium4j.Main" />
+	<property name="jar-class-path" value="./lib/velocity-1.6.3.jar ./lib/selenium-server-standalone-2.28.0.jar ./lib/commons-collections-3.2.1.jar ./lib/commons-lang-2.4.jar ./lib/log4j-1.2.14.jar ./lib/commons-cli-1.2.jar ./lib/commons-io-2.4.jar"/>
+	<property name="shared.repository" value="../.webtest.resources" />
+
+	<path id="base.path">
+		<fileset dir="${basedir}/lib">
+			<include name="parallel-junit.jar" />
+			<include name="log4j-*.jar" />
+			<include name="velocity-*.jar" />
+			<include name="junit-*.jar" />
+			<include name="selenium-server-standalone-2.28.0.jar" />
+            <include name="commons-lang-2.4.jar"/>
+            <include name="commons-cli-1.2.jar"/>
+            <include name="commons-io-2.4.jar"/>
+		</fileset>
+	</path>
+
+	<target name="clean" depends="deleteSuiteBuild">
+		<delete dir="${build.dir}" />
+		<mkdir dir="${src.test.dir}" />
+	</target>
+
+	<target name="deleteSuiteBuild">
+		<delete>
+			<fileset dir="${src.test.dir}" includes="**/*.class" />
+		</delete>
+		<foreach target="deleteSuiteBuildDirs" param="the_file">
+			<path>
+				<dirset dir="${src.test.dir}">
+				</dirset>
+			</path>
+		</foreach>
+	</target>
+
+	<target name="deleteSuiteBuildDirs">
+		<trycatch>
+			<try>
+				<delete includeemptydirs="true">
+				</delete>
+			</try>
+			<catch />
+		</trycatch>
+	</target>
+
+	<target name="compile" depends="clean">
+		<mkdir dir="${classes.dir}" />
+		<javac destdir="${classes.dir}" debug="true" optimize="true" compiler="modern" source="1.5" target="1.5">
+			<src path="${src.dir}" />
+			<classpath>
+				<path refid="base.path" />
+			</classpath>
+		</javac>
+	</target>
+
+	<target name="transform-test" depends="compile">
+		<jar destfile="${transform.jar.name}" basedir="${classes.dir}">
+			<manifest>
+				<attribute name="Main-Class" value="${main-class}" />
+				<attribute name="Class-Path" value="${jar-class-path}" />
+			</manifest>
+		</jar>
+		<java jar="${transform.jar.name}" fork="true" failonerror="true">
+            <arg value="-htmlDir"/>
+            <arg value="${src.test}"/>
+            <arg value="-junitDir"/>
+            <arg value="${src.test.dir}"/>
+            <arg value="-dieOnUnimp"/>
+            <arg value="${dieOnUnimplemented}"/>
+            <arg value="-createFrom"/>
+            <arg value="${createFrom}"/>
+		</java>
+		<delete file="${transform.jar.name}">
+		</delete>
+	</target>
+
+	<target name="compile-test" depends="transform-test">
+		<javac destdir="${classes.dir}" debug="true" optimize="true" compiler="modern" source="1.5" target="1.5">
+			<src path="${src.test.dir}" />
+			<classpath>
+				<path refid="base.path" />
+			</classpath>
+		</javac>
+		<copy todir="${classes.dir}">
+			<fileset dir="${src.test}">
+				<include name="**/*.properties" />
+			</fileset>
+		</copy>
+	</target>
+
+	<taskdef resource="net/sf/antcontrib/antlib.xml">
+		<classpath>
+			<pathelement location="${basedir}/lib/ant-contrib-1.0b2.jar" />
+		</classpath>
+	</taskdef>
+    <!-- TODO  Create executable jar for distribution -->
+
+</project>

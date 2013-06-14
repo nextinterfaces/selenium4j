@@ -1,0 +1,38 @@
+package $package;
+
+import junit.framework.Test;
+import junit.framework.TestSuite;
+import junit.textui.TestRunner;
+
+/**
+ * Parallel testing
+ */
+public class AllTests extends org.kohsuke.junit.ParallelTestSuite {
+  public AllTests(String name) {
+    super(name);
+    //TODO super(name, $cuncurrentUsers); // concurrent users
+  }
+  
+  public static void main(String[] args) {
+    TestRunner.run(suite());
+  }
+
+  public static Test suite() {
+    TestSuite suite = new AllTests("'$package' tests");
+    for (int i = 0; i < $loopCount; i++) {
+#foreach( $testClazz in $testClasses ) 
+      suite.addTestSuite(${testClazz}.class);
+#end
+    }
+    return suite;
+  }
+
+}
+
+///**
+// * Synchronous testing
+// */
+//public class AllTests extends TestSuite {  
+//  public AllTests(String name) {
+//    super(name);
+//  }

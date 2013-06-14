@@ -1,0 +1,32 @@
+package $package;
+
+import junit.framework.Test;
+import junit.framework.TestSuite;
+import junit.textui.TestRunner;
+
+public class AllSuite extends org.roussev.selenium4j.MainTestSuite {
+
+  public AllSuite() {
+  }
+
+  public AllSuite(String name) {
+    super(name);
+  }
+  
+  public static void main(String[] args) {
+    TestRunner.run(suite());
+  }
+
+  public static Test suite() {
+    TestSuite suite = new AllSuite("'$package' suites");
+#if($setupDirExist)
+    suite.addTest(${package}.setup.AllTests.suite());
+#end
+    suite.addTest(${package}.AllTests.suite());
+#if($teardownDirExist)
+    suite.addTest(${package}.teardown.AllTests.suite());
+#end
+    return suite;
+  }
+
+}
