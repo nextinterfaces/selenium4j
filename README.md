@@ -157,7 +157,7 @@ Selenium4j supports setup and teardown. Preview the example suite at `/selenium4
 
         # the web site being tested
 
-        webSite=http://www.roussev.org
+        webSite=http://www.nextinterfaces.com
 
         # The WebDriver being used. Accepted drivers: HtmlUnitDriver, FirefoxDriver, ChromeDriver, InternetExplorerDriver
         driver=FirefoxDriver
