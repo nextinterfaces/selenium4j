@@ -10,6 +10,8 @@ import org.apache.velocity.VelocityContext;
 import org.apache.velocity.app.Velocity;
 import org.apache.velocity.exception.ParseErrorException;
 import org.apache.velocity.exception.ResourceNotFoundException;
+import org.apache.velocity.runtime.RuntimeConstants;
+import org.apache.velocity.runtime.resource.loader.ClasspathResourceLoader;
 import org.roussev.selenium4j.VelocityBean.DriverBean;
 
 /**
@@ -34,6 +36,8 @@ class VelocityTestTranslator {
     logger.debug("Flushing content to java files ...");
     try {
 
+      Velocity.setProperty(RuntimeConstants.RESOURCE_LOADER, "classpath");
+      Velocity.setProperty("classpath.resource.loader.class", ClasspathResourceLoader.class.getName());
       Velocity.init();
 
       /*
