@@ -38,10 +38,10 @@ http://seleniumhq.org/
 
 2. Open [http://seleniumhq.org/projects/ide/ Selenium IDE]
 
-3. Record your test and save it as suite under */selenium4j/test-html* directory. It should contain the following structure:
+3. Record your test and save it as suite and note the directory. The ant build file assumes */selenium4j/test-html*. It should contain the following structure:
 
-        /selenium4j
-     
+         /selenium4j
+
             /test-html
         
                 /MyTests
@@ -91,6 +91,20 @@ http://seleniumhq.org/
 
 8. Add `test-java` folder to your Eclipse/Netbeans source path and execute the generated JUnit tests. The latter will open the given driver(browser) and follow the same steps as in the HTML test.
 
+### Using the distibutable jar file
+As above with an alternate step 7.
+
+Build the jar: `ant dist`  The `selenium4j-transform.jar` will be located in the `/selenium4j/dist` directory.  Feel free to move to a more convenient directory, the dependencies are all included in the jar file. 
+
+Invoke `java -jar dist/selenium4j-transform.jar -htmlDir test-html -junitDir test-java`.  The selenium4j-transform.jar takes the parameters 
+
+    htmlDir: Defaults to ./test-html. The selenese html source.
+
+    junitDir: Defaults to ./test-java. The directory the JUnit tests will be created in.
+
+    dieOnUnimplemented:  Defaults to true.  If your html tests contain a method that has yet to be implemented in java, a string will be written into the test source that will cause a compile error.  If set to false, this string will be commented out, allowing the tests to continue.  (Though if you're dependent on the missing test method, results may be, interesting.)
+
+    createFrom: Defaults to 'suite'.  The name of the file (without extension) to look for to create the JUnit Suite.
 
 ### Parallel Testing
 Selenium4j test suite derives from `org.kohsuke.junit.ParallelTestSuite` [https://parallel-junit.dev.java.net/ Parallel JUnit] allowing parallel suite testing. Bear in mind that while multiple suites are running concurrently, the tests within a single suite are still being executed sequentially.

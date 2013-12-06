@@ -34,10 +34,10 @@ public class Transformer {
   private final static String TEARDOWN_DIR = "teardown";
   private final static String TEST_DIR = "./test-html";
   private final static String TEST_BUILD_DIR = "./test-java";
-  private final static String ALL_SUITES_TEMPLATE = "./src/org/roussev/selenium4j/AllSuites.vm";
-  private final static String ALL_SEQUENTIAL_TEMPLATE = "./src/org/roussev/selenium4j/AllSequentialTests.vm";
-  private final static String ALL_TEST_TEMPLATE = "./src/org/roussev/selenium4j/AllTests.vm";
-  private final static String SELENIUM_TEST_TEMPLATE = "./src/org/roussev/selenium4j/SeleniumJava.vm";
+  private final static String ALL_SUITES_TEMPLATE = "/org/roussev/selenium4j/AllSuites.vm";
+  private final static String ALL_SEQUENTIAL_TEMPLATE = "/org/roussev/selenium4j/AllSequentialTests.vm";
+  private final static String ALL_TEST_TEMPLATE = "/org/roussev/selenium4j/AllTests.vm";
+  private final static String SELENIUM_TEST_TEMPLATE = "/org/roussev/selenium4j/SeleniumJava.vm";
   private final static String SUITE_NAME = "suite";
 
   private final static String PROP_DRIVER = "driver";
@@ -311,9 +311,9 @@ public class Transformer {
       }
 
       // logger.debug(confBean);
-      File copiedProp = new File(TEST_BUILD_DIR + File.separator + dir.getName());
+      File copiedProp = new File(testBuildDir + File.separator + dir.getName());
       copiedProp.mkdir();
-      Utilities.copyFile(propFile, new File(TEST_BUILD_DIR + File.separator + dir.getName() + File.separator + Globals.CONF_FILE));
+      Utilities.copyFile(propFile, new File(testBuildDir + File.separator + dir.getName() + File.separator + Globals.CONF_FILE));
     } catch (FileNotFoundException e1) {
         throw new RuntimeException("Missing \"" + Globals.CONF_FILE + "\" file at " + dir + ".");
     }
@@ -384,7 +384,7 @@ public class Transformer {
 
     for (@SuppressWarnings("unused")
     DriverBean bp : velocityBean.getDriverBeans()) {
-      String fileOut = TEST_BUILD_DIR + allDirName + File.separator
+      String fileOut = testBuildDir + allDirName + File.separator
           + "AllTests.java";
       t.doWrite(classBeans, velocityBean, packageName, fileOut, false, false);
     }
@@ -393,14 +393,14 @@ public class Transformer {
   private void createAllSuites(String packageName) {
     logger.debug("Building AllTest Suite for " + packageName + "");
 
-    File dirSetup = new File(TEST_BUILD_DIR + File.separator + packageName
+    File dirSetup = new File(testBuildDir + File.separator + packageName
         + File.separator + SETUP_DIR);
-    File dirTeardown = new File(TEST_BUILD_DIR + File.separator + packageName
+    File dirTeardown = new File(testBuildDir + File.separator + packageName
         + File.separator + TEARDOWN_DIR);
 
     VelocitySuiteTranslator t = new VelocitySuiteTranslator(ALL_SUITES_TEMPLATE);
 
-    String fileOut = TEST_BUILD_DIR + File.separator + packageName
+    String fileOut = testBuildDir + File.separator + packageName
         + File.separator + "AllSuite.java";
     t.doWrite(null, null, packageName, fileOut, dirSetup.exists(), dirTeardown
         .exists());
@@ -412,7 +412,7 @@ public class Transformer {
         DriverBean driverBean) throws Exception {
       File subDir = new File(dir.getName() + File.separator + subPackage);
       String dirName = subDir.getName();
-      File packageDir = new File(TEST_BUILD_DIR + File.separator
+      File packageDir = new File(testBuildDir + File.separator
           + classBean.getPackageName() + File.separator + dirName);
       packageDir.mkdirs();
 
@@ -433,7 +433,7 @@ public class Transformer {
       String subDirName = subDir.getName();
       String parentDirName = dir.getParentFile().getName();
 
-      File packageDir = new File(TEST_BUILD_DIR + File.separator
+      File packageDir = new File(testBuildDir + File.separator
           + parentDirName + File.separator + dirName + File.separator
           + subDirName);
       packageDir.mkdirs();
