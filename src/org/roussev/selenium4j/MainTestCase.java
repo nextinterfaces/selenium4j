@@ -9,13 +9,14 @@ import junit.framework.TestCase;
 
 import org.apache.log4j.Logger;
 import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.WebDriverBackedSelenium;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.firefox.FirefoxDriver;
 import org.openqa.selenium.htmlunit.HtmlUnitDriver;
 import org.openqa.selenium.ie.InternetExplorerDriver;
+import org.openqa.selenium.phantomjs.PhantomJSDriver;
 
 import com.thoughtworks.selenium.Selenium;
+import com.thoughtworks.selenium.webdriven.WebDriverBackedSelenium;
 
 /**
  * 
@@ -96,7 +97,8 @@ public abstract class MainTestCase extends TestCase {
 			
 		} else if (InternetExplorerDriver.class.getSimpleName().equals(driver)) {
 			webDriver = new InternetExplorerDriver();
-			
+		} else if (PhantomJSDriver.class.getSimpleName().equals(driver)) {
+			webDriver = new PhantomJSDriver();
 		} else {
 			throw new UnsupportedOperationException("Driver '" + driver
 					+ "' is not supported.");

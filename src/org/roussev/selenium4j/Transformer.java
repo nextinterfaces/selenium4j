@@ -16,6 +16,7 @@ import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.firefox.FirefoxDriver;
 import org.openqa.selenium.htmlunit.HtmlUnitDriver;
 import org.openqa.selenium.ie.InternetExplorerDriver;
+import org.openqa.selenium.phantomjs.PhantomJSDriver;
 import org.roussev.selenium4j.VelocityBean.DriverBean;
 
 /**
@@ -356,6 +357,8 @@ public class Transformer {
     } else if (InternetExplorerDriver.class.getSimpleName().equals(
         bp.getDriver())) {
       return "IE";
+    } else if (PhantomJSDriver.class.getSimpleName().equals(bp.getDriver())){
+    	return "PH";
     } else {
       throw new UnsupportedOperationException("Driver '" + bp.getDriver()
           + "' is not supported.");
