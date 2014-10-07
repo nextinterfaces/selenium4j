@@ -4,6 +4,7 @@ import java.io.PrintWriter;
 import java.io.StringWriter;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.TimeUnit;
 
 import junit.framework.TestCase;
 
@@ -104,6 +105,8 @@ public abstract class MainTestCase extends TestCase {
 					+ "' is not supported.");
 		}
 
+		webDriver.manage().timeouts().implicitlyWait(15, TimeUnit.SECONDS);
+		
 		WebDriverBackedSelenium selenium = new WebDriverBackedSelenium(webDriver, webSite);
 
 		DriverSelenium driverSelenium = new DriverSelenium();
